@@ -12,7 +12,21 @@ import 'package:flutter_chrome_cast/flutter_chrome_cast.dart';
 /// Button that allows the user to connect to a Google Cast device and
 /// start or stop a cast session.
 class CastButtonWidget extends StatefulWidget {
-  const CastButtonWidget({Key? key}) : super(key: key);
+  const CastButtonWidget({
+    Key? key,
+    this.videoUrl,
+    this.title,
+    this.image,
+  }) : super(key: key);
+
+  /// Url of the video to be cast to the remote device.
+  final String? videoUrl;
+
+  /// Optional title shown on the cast device.
+  final String? title;
+
+  /// Optional preview image for the video.
+  final String? image;
 
   @override
   State<CastButtonWidget> createState() => _CastButtonWidgetState();
@@ -55,6 +69,17 @@ class _CastButtonWidgetState extends State<CastButtonWidget> {
               if (device != null) {
                 await GoogleCastSessionManager.instance
                     .startSessionWithDevice(device);
+                // Wait for the session to be established before casting media.
+                await GoogleCastSessionManager.instance.currentSessionStream
+                    .firstWhere((session) => session != null);
+
+                if (widget.videoUrl != null) {
+                  await castVideo(
+                    url: widget.videoUrl!,
+                    title: widget.title,
+                    image: widget.image,
+                  );
+                }
               }
             }
           },
