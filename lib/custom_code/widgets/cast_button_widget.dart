@@ -7,33 +7,57 @@ import 'package:flutter/material.dart';
 // Begin custom widget code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-// VERSÃO DE TESTE FINAL - COMENTADA
+import 'package:flutter_chrome_cast/flutter_chrome_cast.dart';
 
-// import 'package:flutter_chrome_cast/flutter_chrome_cast.dart'; // Comentado
-
+/// Button that allows the user to connect to a Google Cast device and
+/// start or stop a cast session.
 class CastButtonWidget extends StatefulWidget {
   const CastButtonWidget({Key? key}) : super(key: key);
 
   @override
-  _CastButtonWidgetState createState() => _CastButtonWidgetState();
+  State<CastButtonWidget> createState() => _CastButtonWidgetState();
 }
 
 class _CastButtonWidgetState extends State<CastButtonWidget> {
-  // late ChromeCastController _controller; // Comentado
-
-  @override
-  void initState() {
-    super.initState();
-    // _controller = ChromeCastController.instance; // Comentado
-  }
-
   @override
   Widget build(BuildContext context) {
-    // Retornando um container vazio para o teste.
-    return Container(
-      width: 48.0,
-      height: 48.0,
-      color: Colors.purple, // Cor roxa para sabermos que é o widget de teste
+    return StreamBuilder<GoogleCastSession?>(
+      stream: GoogleCastSessionManager.instance.currentSessionStream,
+      builder: (context, snapshot) {
+        final connected = GoogleCastSessionManager.instance.connectionState ==
+            GoogleCastConnectState.connected;
+        return IconButton(
+          icon: Icon(
+            connected ? Icons.cast_connected : Icons.cast,
+            color: FlutterFlowTheme.of(context).primaryText,
+          ),
+          onPressed: () async {
+            if (connected) {
+              await GoogleCastSessionManager.instance
+                  .endSessionAndStopCasting();
+            } else {
+              final devices = await GoogleCastDiscoveryManager
+                  .instance.devicesStream.first;
+              final device = await showDialog<GoogleCastDevice>(
+                context: context,
+                builder: (context) => SimpleDialog(
+                  title: const Text('Selecionar dispositivo'),
+                  children: devices
+                      .map((d) => SimpleDialogOption(
+                            onPressed: () => Navigator.pop(context, d),
+                            child: Text(d.friendlyName ?? d.id),
+                          ))
+                      .toList(),
+                ),
+              );
+              if (device != null) {
+                await GoogleCastSessionManager.instance
+                    .startSessionWithDevice(device);
+              }
+            }
+          },
+        );
+      },
     );
   }
 }
