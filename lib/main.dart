@@ -7,6 +7,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+import '/custom_code/actions/index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
+    initializeGoogleCast();
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
 
