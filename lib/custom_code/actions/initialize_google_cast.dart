@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
 import 'dart:io';
-import 'package:flutter_chrome_cast/cast_context.dart';
-import 'package:flutter_chrome_cast/discovery.dart';
+import 'package:flutter_chrome_cast/flutter_chrome_cast.dart';
 
 /// Flag to ensure initialization happens only once.
 bool isCastInitialized = false;
@@ -21,7 +20,7 @@ Future<void> initializeGoogleCast() async {
   }
 
   const appId = GoogleCastDiscoveryCriteria.kDefaultApplicationId;
-  GoogleCastOptions? options;
+  late final GoogleCastOptions options;
   if (Platform.isIOS) {
     options = IOSGoogleCastOptions(
       GoogleCastDiscoveryCriteriaInitialize.initWithApplicationID(appId),
@@ -30,6 +29,6 @@ Future<void> initializeGoogleCast() async {
     options = GoogleCastOptionsAndroid(appId: appId);
   }
 
-  GoogleCastContext.instance.setSharedInstanceWithOptions(options!);
+  await GoogleCastContext.instance.setSharedInstanceWithOptions(options);
   isCastInitialized = true;
 }
