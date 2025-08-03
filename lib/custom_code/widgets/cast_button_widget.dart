@@ -36,17 +36,19 @@ class _CastButtonWidgetState extends State<CastButtonWidget> {
               await GoogleCastSessionManager.instance
                   .endSessionAndStopCasting();
             } else {
-              final devices = await GoogleCastDiscoveryManager
-                  .instance.devicesStream.first;
+              final devices =
+                  await GoogleCastDiscoveryManager.instance.devicesStream.first;
               final device = await showDialog<GoogleCastDevice>(
                 context: context,
                 builder: (context) => SimpleDialog(
                   title: const Text('Selecionar dispositivo'),
                   children: devices
-                      .map((d) => SimpleDialogOption(
-                            onPressed: () => Navigator.pop(context, d),
-                            child: Text(d.friendlyName ?? d.id),
-                          ))
+                      .map(
+                        (d) => SimpleDialogOption(
+                          onPressed: () => Navigator.pop(context, d),
+                          child: Text(d.friendlyName),
+                        ),
+                      )
                       .toList(),
                 ),
               );
