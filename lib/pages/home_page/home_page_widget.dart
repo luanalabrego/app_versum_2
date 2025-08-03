@@ -58,8 +58,14 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           backgroundColor: Colors.black,
           automaticallyImplyLeading: false,
           elevation: 0.0,
-          actions: const [
-            CastButtonWidget(),
+          actions: [
+            CastButtonWidget(
+              videoUrl:
+                  'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+              title: 'Big Buck Bunny',
+              image:
+                  'https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+            ),
           ],
         ),
         body: SafeArea(
