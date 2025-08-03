@@ -29,7 +29,7 @@ class _CastButtonWidgetState extends State<CastButtonWidget> {
         return IconButton(
           icon: Icon(
             connected ? Icons.cast_connected : Icons.cast,
-            color: FlutterFlowTheme.of(context).primaryText,
+            color: Colors.white,
           ),
           onPressed: () async {
             if (connected) {
