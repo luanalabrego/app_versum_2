@@ -36,8 +36,6 @@ class FlutterFlowWebView extends StatefulWidget {
 }
 
 class _FlutterFlowWebViewState extends State<FlutterFlowWebView> {
-  WebViewXController? _controller;
-
   @override
   Widget build(BuildContext context) => WebViewX(
         key: webviewKey,
@@ -54,15 +52,11 @@ class _FlutterFlowWebViewState extends State<FlutterFlowWebView> {
                 : SourceType.url,
         javascriptMode: JavascriptMode.unrestricted,
         onWebViewCreated: (controller) async {
-          _controller = controller;
           if (controller.connector is WebViewController && isAndroid) {
             final androidController =
                 controller.connector.platform as AndroidWebViewController;
             await androidController.setOnShowFileSelector(_androidFilePicker);
           }
-        },
-        onPageFinished: (_) async {
-          await _injectCastShim();
         },
         navigationDelegate: (request) async {
           if (isAndroid) {
@@ -121,16 +115,5 @@ class _FlutterFlowWebViewState extends State<FlutterFlowWebView> {
       return [file.uri.toString()];
     }
     return [];
-  }
-
-  Future<void> _injectCastShim() async {
-    try {
-      await _controller?.evalRawJavascript(
-        'if (typeof window.cast === "undefined") { window.cast = {}; }',
-        inGlobalContext: true,
-      );
-    } catch (_) {
-      // Ignore errors from script evaluation
-    }
   }
 }
