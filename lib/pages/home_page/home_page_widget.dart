@@ -1,6 +1,5 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_web_view.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import '/custom_code/widgets/index.dart';
@@ -72,13 +71,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           top: true,
           child: Stack(
             children: [
-              FlutterFlowWebView(
-                content: 'https://app-versum.web.app/',
-                bypass: false,
+              PersistentWebView(
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: MediaQuery.sizeOf(context).height * 1.0,
-                verticalScroll: false,
-                horizontalScroll: false,
+                initialUrl: 'https://app-versum.web.app/',
               ),
             ],
           ),
