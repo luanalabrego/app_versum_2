@@ -30,5 +30,6 @@ Future<void> initializeGoogleCast() async {
   }
 
   await GoogleCastContext.instance.setSharedInstanceWithOptions(options);
+  await GoogleCastDiscoveryManager.instance.startDiscovery();
   isCastInitialized = true;
 }
