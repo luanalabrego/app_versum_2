@@ -6,16 +6,30 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-// import 'package:flutter_chrome_cast/flutter_chrome_cast.dart'; // Comentado
+import 'dart:io';
+import 'package:flutter_chrome_cast/cast_context.dart';
+import 'package:flutter_chrome_cast/discovery.dart';
 
+/// Flag to ensure initialization happens only once.
 bool isCastInitialized = false;
 
+/// Initializes the Google Cast context so that cast devices can be
+/// discovered and sessions can be started.
 Future<void> initializeGoogleCast() async {
-  // if (isCastInitialized) { // Comentado
-  //   return; // Comentado
-  // } // Comentado
-  // await ChromeCastController.instance.initialize( // Comentado
-  //   appId: 'CC1AD845', // Comentado
-  // ); // Comentado
-  // isCastInitialized = true; // Comentado
+  if (isCastInitialized) {
+    return;
+  }
+
+  const appId = GoogleCastDiscoveryCriteria.kDefaultApplicationId;
+  GoogleCastOptions? options;
+  if (Platform.isIOS) {
+    options = IOSGoogleCastOptions(
+      GoogleCastDiscoveryCriteriaInitialize.initWithApplicationID(appId),
+    );
+  } else {
+    options = GoogleCastOptionsAndroid(appId: appId);
+  }
+
+  GoogleCastContext.instance.setSharedInstanceWithOptions(options!);
+  isCastInitialized = true;
 }
