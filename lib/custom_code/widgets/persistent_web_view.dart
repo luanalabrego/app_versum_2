@@ -35,7 +35,7 @@ class _PersistentWebViewState extends State<PersistentWebView> {
       height: widget.height,
       child: InAppWebView(
         initialUrlRequest: widget.initialUrl != null
-            ? URLRequest(url: WebUri(widget.initialUrl!))
+            ? URLRequest(url: Uri.parse(widget.initialUrl!))
             : null,
         onWebViewCreated: (controller) {
           _controller = controller;
