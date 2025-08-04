@@ -9,7 +9,9 @@ import com.google.android.gms.cast.CastMediaControlIntent
 class CastOptionsProvider : OptionsProvider {
     override fun getCastOptions(context: Context): CastOptions {
         return CastOptions.Builder()
-            .setReceiverApplicationId(CastMediaControlIntent.DEFAULT_MEDIA_RECEIVER_APPLICATION_ID)
+            // Use the custom Cast application ID registered in the developer
+            // console instead of the default media receiver.
+            .setReceiverApplicationId("4D64B6E0")
             .build()
     }
 
