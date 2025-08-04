@@ -24,7 +24,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
-
   }
 
   @override
@@ -44,11 +43,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          automaticallyImplyLeading: false,
-          elevation: 0.0,
-        ),
         body: SafeArea(
           top: true,
           child: Stack(
