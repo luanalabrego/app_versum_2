@@ -55,6 +55,9 @@ class _CastButtonWidgetState extends State<CastButtonWidget> {
               if (device != null) {
                 await GoogleCastSessionManager.instance
                     .startSessionWithDevice(device);
+                // After establishing a session, request the current video
+                // from the backend and start casting it.
+                await requestAndCastVideo();
               }
             }
           },
