@@ -43,17 +43,21 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.black,
-        body: Stack(
-          children: [
-            FlutterFlowWebView(
-              content: 'https://app-versum.web.app/',
-              bypass: false,
-              width: MediaQuery.sizeOf(context).width * 1.0,
-              height: MediaQuery.sizeOf(context).height * 1.0,
-              verticalScroll: false,
-              horizontalScroll: false,
-            ),
-          ],
+        body: SafeArea(
+          top: true,
+          child: Stack(
+            children: [
+              FlutterFlowWebView(
+                content: 'https://app-versum.web.app/',
+                bypass: false,
+                width: MediaQuery.sizeOf(context).width * 1.0,
+                height: MediaQuery.sizeOf(context).height * 1.0,
+                verticalScroll: false,
+                horizontalScroll: false,
+              ),
+            ],
+          ),
+
         ),
       ),
     );
