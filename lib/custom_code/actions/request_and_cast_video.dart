@@ -8,16 +8,19 @@ import 'package:flutter/material.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:app_versum/config/app_config.dart';
 
 /// Requests the current video URL from a backend service and casts it.
 Future<void> requestAndCastVideo({
-  // Use an accessible host for emulators or physical devices instead of
-  // `localhost`. `10.0.2.2` points to the host machine when running on the
-  // Android emulator.
-  String endpoint = 'http://10.0.2.2:8080/current-video',
+  /// Optional override for the backend endpoint. By default the value from
+  /// [AppConfig.currentVideoEndpoint] is used, which can be set at build time
+  /// via the `SERVER_URL` environment variable.
+  String? endpoint,
 }) async {
-  debugPrint('Requesting video from: $endpoint');
-  final response = await http.get(Uri.parse(endpoint));
+  final resolvedEndpoint = endpoint ?? AppConfig.currentVideoEndpoint;
+
+  debugPrint('Requesting video from: $resolvedEndpoint');
+  final response = await http.get(Uri.parse(resolvedEndpoint));
   debugPrint('Response status: ${response.statusCode}');
 
   if (response.statusCode != 200) {
