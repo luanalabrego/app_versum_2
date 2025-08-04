@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Versum Cast Receiver</title>
+    <style>
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; }
+      #player { width: 100%; height: 100%; }
+    </style>
+    <script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+  </head>
+  <body>
+    <div id="player"></div>
+    <script>
+      const context = cast.framework.CastReceiverContext.getInstance();
+      context.setLoggerLevel(cast.framework.LoggerLevel.DEBUG);
+      const playerManager = context.getPlayerManager();
+      let vimeoPlayer;
+
+      playerManager.addEventListener(cast.framework.events.EventType.ERROR, event => {
+        console.error('Cast player error:', event);
+      });
+
+      playerManager.setMessageInterceptor(
+        cast.framework.messages.MessageType.LOAD,
+        loadRequestData => {
+          console.log('LOAD message:', loadRequestData);
+          const contentId = loadRequestData.media.contentId;
+          if (vimeoPlayer) {
+            vimeoPlayer.unload && vimeoPlayer.unload();
+          }
+          vimeoPlayer = new Vimeo.Player('player', { id: contentId });
+          vimeoPlayer.on('play', () => console.log('Vimeo play'));
+          vimeoPlayer.on('pause', () => console.log('Vimeo pause'));
+          vimeoPlayer.on('timeupdate', e => console.log('Vimeo timeupdate:', e.seconds));
+          vimeoPlayer.on('ended', () => console.log('Vimeo ended'));
+          vimeoPlayer.on('error', e => console.error('Vimeo error:', e));
+          return loadRequestData;
+        }
+      );
+
+      playerManager.setMessageInterceptor(
+        cast.framework.messages.MessageType.PLAY,
+        request => {
+          console.log('PLAY message:', request);
+          vimeoPlayer && vimeoPlayer.play();
+          return request;
+        }
+      );
+
+      playerManager.setMessageInterceptor(
+        cast.framework.messages.MessageType.PAUSE,
+        request => {
+          console.log('PAUSE message:', request);
+          vimeoPlayer && vimeoPlayer.pause();
+          return request;
+        }
+      );
+
+      context.start({
+        skipPlayersLoad: true,
+        disableIdleTimeout: true,
+        supportedCommands: cast.framework.messages.Command.ALL_BASIC_MEDIA,
+      });
+    </script>
+  </body>
+</html>
