@@ -18,8 +18,10 @@ Future<void> initializeGoogleCast() async {
   if (isCastInitialized) {
     return;
   }
-
-  const appId = GoogleCastDiscoveryCriteria.kDefaultApplicationId;
+  // Use the registered Google Cast application ID instead of the default
+  // media receiver. This must match the ID configured in the Google Cast
+  // Developer Console for this project.
+  const appId = '4D64B6E0';
   late final GoogleCastOptions options;
   if (Platform.isIOS) {
     options = IOSGoogleCastOptions(
