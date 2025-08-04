@@ -24,7 +24,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
-
   }
 
   @override
@@ -44,25 +43,17 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          automaticallyImplyLeading: false,
-          elevation: 0.0,
-        ),
-        body: SafeArea(
-          top: true,
-          child: Stack(
-            children: [
-              FlutterFlowWebView(
-                content: 'https://app-versum.web.app/',
-                bypass: false,
-                width: MediaQuery.sizeOf(context).width * 1.0,
-                height: MediaQuery.sizeOf(context).height * 1.0,
-                verticalScroll: false,
-                horizontalScroll: false,
-              ),
-            ],
-          ),
+        body: Stack(
+          children: [
+            FlutterFlowWebView(
+              content: 'https://app-versum.web.app/',
+              bypass: false,
+              width: MediaQuery.sizeOf(context).width * 1.0,
+              height: MediaQuery.sizeOf(context).height * 1.0,
+              verticalScroll: false,
+              horizontalScroll: false,
+            ),
+          ],
         ),
       ),
     );
