@@ -1,54 +1,44 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
+# Flutter/Dart
 .dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
 .packages
 .pub-cache/
-.pub/
-/build/
+build/
+flutter_export_environment.sh
 
-# Firebase – this is necessary if you use Firebase since it could otherwise 
-# lead to leaking of private certificates to your repository, which is no bueno.
-.firebase/
+# Android
+android/.gradle/
+android/.idea/
+android/local.properties
+android/app/build/
+android/build/
+**/intermediates/
+**/generated/
+**/outputs/
 
-# Web related
-lib/generated_plugin_registrant.dart
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/ephemeral/
+Runner.build/
 
-# Symbolication related
-app.*.symbols
+# Web
+web/.dart_tool/
+.web/
 
-# Obfuscation related
-app.*.map.json
+# Bundles grandes
+*.aab
+*.apk
+*.ipa
+*.zip
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# Node server
-server/node_modules/
-server/dist/
+# Segredos
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+*.p12
+*.keystore
+*.jks
+*.pem
+*.p8
