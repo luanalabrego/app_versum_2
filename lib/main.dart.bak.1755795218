@@ -1,0 +1,111 @@
+import 'package:flutter/material.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import 'flutter_flow/flutter_flow_util.dart';
+import 'flutter_flow/nav/nav.dart';
+import 'index.dart';
+
+// Firebase
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializa Firebase (Android/iOS lêem os arquivos nativos de config).
+  await Firebase.initializeApp();
+
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+  usePathUrlStrategy();
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>()!;
+}
+
+class _MyAppState extends State<MyApp> {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  late AppStateNotifier _appStateNotifier;
+  late GoRouter _router;
+
+  // ===== Helpers de rota/Analytics =====
+  String getRoute([RouteMatch? routeMatch]) {
+    final RouteMatch lastMatch =
+        routeMatch ?? _router.routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : _router.routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
+
+  List<String> getRouteStack() =>
+      _router.routerDelegate.currentConfiguration.matches
+          .map((e) => getRoute(e))
+          .toList();
+
+  bool displaySplashImage = true;
+
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
+
+  Future<void> _trackCurrentScreen() async {
+    try {
+      final name = getRoute();
+      await FirebaseAnalytics.instance.logScreenView(screenName: name, screenClass: 'Flutter');
+    } catch (_) {
+      // silencioso
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _appStateNotifier = AppStateNotifier.instance;
+    _router = createRouter(_appStateNotifier);
+
+    // Loga a tela inicial e observa mudanças de rota para enviar screen_view.
+    _trackCurrentScreen();
+    _router.routerDelegate.addListener(_trackCurrentScreen);
+
+    Future.delayed(const Duration(milliseconds: 2000),
+        () => safeSetState(() => _appStateNotifier.stopShowingSplashImage()));
+  }
+
+  @override
+  void dispose() {
+    _router.routerDelegate.removeListener(_trackCurrentScreen);
+    super.dispose();
+  }
+
+  void setThemeMode(ThemeMode mode) => safeSetState(() {
+        _themeMode = mode;
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'AppVersum',
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('en', '')],
+      theme: ThemeData(
+        brightness: Brightness.light,
+        useMaterial3: false,
+      ),
+      themeMode: _themeMode,
+      routerConfig: _router,
+    );
+  }
+}

@@ -1,0 +1,2 @@
+/Users/lucassantos/Downloads/app_versum_2/android/app/.cxx/RelWithDebInfo/v1x211l5/x86_64/CMakeFiles/edit_cache.dir
+/Users/lucassantos/Downloads/app_versum_2/android/app/.cxx/RelWithDebInfo/v1x211l5/x86_64/CMakeFiles/rebuild_cache.dir

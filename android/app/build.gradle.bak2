@@ -1,0 +1,90 @@
+plugins {
+    id "com.google.gms.google-services"
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+import java.util.Properties
+
+// 1) Lê as versões definidas pelo Flutter
+def localProps = new Properties()
+def lpFile = rootProject.file('local.properties')
+if (lpFile.exists()) {
+    lpFile.withReader('UTF-8') { r -> localProps.load(r) }
+}
+def flutterVersionCode = localProps.getProperty('flutter.versionCode') ?: '1'
+def flutterVersionName = localProps.getProperty('flutter.versionName') ?: '1.0'
+
+// 2) Lê credenciais do keystore
+def keyProps = new Properties()
+def kpFile = rootProject.file('key.properties')
+if (kpFile.exists()) {
+    keyProps.load(new FileInputStream(kpFile))
+}
+
+android {
+    namespace "br.com.massdev.appversum"
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId "br.com.massdev.appversum"
+        minSdkVersion flutter.minSdkVersion
+        targetSdk = 36
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    // Garante uso de Java 17
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    signingConfigs {
+        release {
+            storeFile    file(keyProps['storeFile'])
+            storePassword keyProps['storePassword']
+            keyAlias      keyProps['keyAlias']
+            keyPassword   keyProps['keyPassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            // Habilita shrink e minify para gerar mapping.txt
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
+    implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
+}

@@ -1,0 +1,33 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="br.com.massdev.appversum" xmlns:tools="http://schemas.android.com/tools">
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <application
+<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    android:label="Versum"
+    android:usesCleartextTraffic="true"
+    tools:replace="android:label"
+    android:icon="@mipmap/ic_launcher"
+    android:requestLegacyExternalStorage="true"
+  >
+    <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
+      <!-- Flutter splash screen metadata -->
+      <meta-data android:name="io.flutter.embedding.android.NormalTheme" android:resource="@style/NormalTheme"/>
+      <meta-data android:name="io.flutter.embedding.android.SplashScreenDrawable" android:resource="@drawable/launch_background"/>
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+      <!-- Deep linking -->
+      <meta-data android:name="flutter_deeplinking_enabled" android:value="true"/>
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="appversum" android:host="appversum.com"/>
+      </intent-filter>
+    </activity>
+    <!-- ← Fecha a MainActivity -->
+    <!-- Essentials for Flutter embedding -->
+    <meta-data android:name="flutterEmbedding" android:value="2"/>
+    <!-- Google Cast Framework provider -->
+  </application>
+</manifest>

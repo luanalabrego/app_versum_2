@@ -35,81 +35,73 @@ class FlutterFlowWebView extends StatefulWidget {
   _FlutterFlowWebViewState createState() => _FlutterFlowWebViewState();
 }
 
-class _FlutterFlowWebViewState extends State<FlutterFlowWebView> {
+class _FlutterFlowWebViewState extends State<FlutterFlowWebView>
+    with AutomaticKeepAliveClientMixin<FlutterFlowWebView> {
   @override
-  Widget build(BuildContext context) => WebViewX(
-        key: webviewKey,
-        width: widget.width ?? MediaQuery.sizeOf(context).width,
-        height: widget.height ?? MediaQuery.sizeOf(context).height,
-        ignoreAllGestures: false,
-        initialContent: widget.content,
-        initialMediaPlaybackPolicy:
-            AutoMediaPlaybackPolicy.requireUserActionForAllMediaTypes,
-        initialSourceType: widget.html
-            ? SourceType.html
-            : widget.bypass
-                ? SourceType.urlBypass
-                : SourceType.url,
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (controller) async {
-          if (controller.connector is WebViewController && isAndroid) {
-            final androidController =
-                controller.connector.platform as AndroidWebViewController;
-            await androidController.setOnShowFileSelector(_androidFilePicker);
-          }
-        },
-        navigationDelegate: (request) async {
-          if (isAndroid) {
-            if (request.content.source
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return WebViewX(
+      width: widget.width ?? MediaQuery.sizeOf(context).width,
+      height: widget.height ?? MediaQuery.sizeOf(context).height,
+      ignoreAllGestures: false,
+      initialContent: widget.content,
+      initialMediaPlaybackPolicy:
+          AutoMediaPlaybackPolicy.requireUserActionForAllMediaTypes,
+      initialSourceType: widget.html
+          ? SourceType.html
+          : widget.bypass
+              ? SourceType.urlBypass
+              : SourceType.url,
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (controller) async {
+        if (controller.connector is WebViewController && isAndroid) {
+          final androidController =
+              controller.connector.platform as AndroidWebViewController;
+          await androidController.setOnShowFileSelector(_androidFilePicker);
+        }
+      },
+      navigationDelegate: (request) async {
+        if (isAndroid &&
+            request.content.source
                 .startsWith('https://api.whatsapp.com/send?phone')) {
-              String url = request.content.source;
-
-              await launchUrl(
-                Uri.parse(url),
-                mode: LaunchMode.externalApplication,
-              );
-              return NavigationDecision.prevent;
-            }
-          }
-          return NavigationDecision.navigate;
+          final url = request.content.source;
+          await launchUrl(
+            Uri.parse(url),
+            mode: LaunchMode.externalApplication,
+          );
+          return NavigationDecision.prevent;
+        }
+        return NavigationDecision.navigate;
+      },
+      webSpecificParams: const WebSpecificParams(
+        webAllowFullscreenContent: true,
+      ),
+      mobileSpecificParams: MobileSpecificParams(
+        debuggingEnabled: false,
+        gestureNavigationEnabled: true,
+        mobileGestureRecognizers: {
+          if (widget.verticalScroll)
+            Factory<VerticalDragGestureRecognizer>(
+              () => VerticalDragGestureRecognizer(),
+            ),
+          if (widget.horizontalScroll)
+            Factory<HorizontalDragGestureRecognizer>(
+              () => HorizontalDragGestureRecognizer(),
+            ),
         },
-        webSpecificParams: const WebSpecificParams(
-          webAllowFullscreenContent: true,
-        ),
-        mobileSpecificParams: MobileSpecificParams(
-          debuggingEnabled: false,
-          gestureNavigationEnabled: true,
-          mobileGestureRecognizers: {
-            if (widget.verticalScroll)
-              Factory<VerticalDragGestureRecognizer>(
-                () => VerticalDragGestureRecognizer(),
-              ),
-            if (widget.horizontalScroll)
-              Factory<HorizontalDragGestureRecognizer>(
-                () => HorizontalDragGestureRecognizer(),
-              ),
-          },
-          androidEnableHybridComposition: true,
-        ),
-      );
-
-  Key get webviewKey => Key(
-        [
-          widget.content,
-          widget.width,
-          widget.height,
-          widget.bypass,
-          widget.horizontalScroll,
-          widget.verticalScroll,
-          widget.html,
-        ].map((s) => s?.toString() ?? '').join(),
-      );
+        androidEnableHybridComposition: true,
+      ),
+    );
+  }
 
   Future<List<String>> _androidFilePicker(
     final FileSelectorParams params,
   ) async {
     final result = await FilePicker.platform.pickFiles();
-
     if (result != null && result.files.single.path != null) {
       final file = File(result.files.single.path!);
       return [file.uri.toString()];

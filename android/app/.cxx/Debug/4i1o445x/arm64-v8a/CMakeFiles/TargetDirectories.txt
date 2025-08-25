@@ -1,0 +1,2 @@
+/Users/lucassantos/Downloads/app_versum_2/android/app/.cxx/debug/4i1o445x/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/lucassantos/Downloads/app_versum_2/android/app/.cxx/debug/4i1o445x/arm64-v8a/CMakeFiles/rebuild_cache.dir

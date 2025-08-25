@@ -1,0 +1,1 @@
+/Users/lucassantos/Downloads/app_versum_2/android/app/build/intermediates/cxx/RelWithDebInfo/v1x211l5/obj/x86

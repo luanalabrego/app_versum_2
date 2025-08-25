@@ -1,15 +1,11 @@
-// Automatic FlutterFlow imports
-import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/flutter_flow_util.dart';
-import 'index.dart'; // Imports other custom actions
-import 'package:flutter/material.dart';
-// Begin custom action code
-// DO NOT REMOVE OR MODIFY THE CODE ABOVE!
-
 import 'package:flutter_chrome_cast/flutter_chrome_cast.dart';
 
-/// Loads the provided [url] on the connected cast device.
-Future<void> castVideo({required String url, String? title, String? image}) async {
+/// Carrega o [url] no dispositivo Cast conectado.
+Future<void> castVideo({
+  required String url,
+  String? title,
+  String? image,
+}) async {
   final media = GoogleCastMediaInformation(
     contentId: url,
     streamType: CastMediaStreamType.buffered,
@@ -21,8 +17,18 @@ Future<void> castVideo({required String url, String? title, String? image}) asyn
     ),
   );
 
-  await GoogleCastRemoteMediaClient.instance.loadMedia(
-    media,
-    autoPlay: true,
-  );
+  try {
+    // Apenas await, sem atribuição:
+    await GoogleCastRemoteMediaClient.instance.loadMedia(
+      media,
+      autoPlay: true,
+    );
+
+    // Se chegou até aqui sem erro:
+    print('✅ Vídeo iniciado com sucesso no dispositivo Cast.');
+  } catch (e) {
+    // Qualquer erro no canal de plataforma cai aqui
+    print('❌ Falha ao iniciar o cast: $e');
+    // Opcionalmente mostre um Snackbar ou diálogo ao usuário
+  }
 }

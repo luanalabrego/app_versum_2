@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"   "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <!-- Método de distribuição: app-store, ad-hoc, enterprise ou development -->
+    <key>method</key>
+    <string>app-store</string>
+    <!-- Inclui bitcode no upload (opcional) -->
+    <key>uploadBitcode</key>
+    <true/>
+    <!-- Se você não quer recompilar bitcode no servidor -->
+    <key>compileBitcode</key>
+    <false/>
+  </dict>
+</plist>

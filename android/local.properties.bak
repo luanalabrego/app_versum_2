@@ -1,0 +1,5 @@
+sdk.dir=/Users/lucassantos/Library/Android/sdk
+flutter.sdk=/Users/lucassantos/flutter
+flutter.buildMode=debug
+flutter.versionName=1.0.9
+flutter.versionCode=18
